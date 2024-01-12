@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             labelTextView.setText(name + " : " + convertToKMH(threshold));
         }
 
-        private String convertToKMH(float speed){
+        public String convertToKMH(float speed){
             float kmh = speed * KMH;
             return Float.toString(kmh) + " KMH";
         }
@@ -217,9 +217,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             float speed = intent.getFloatExtra("SPEED", 0.4f);
+            float kmh = speed*KMH;
             adjustVolume(speed);
-            updateSpeedDisplay(speed * 4.4f);
+            updateSpeedDisplay(kmh);
             handleSongPlayback(speed);
         }
+
     }
 }
