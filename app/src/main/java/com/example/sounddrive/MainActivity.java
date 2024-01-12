@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                             .setUsage(AudioAttributes.USAGE_MEDIA)
                             .build())
+                    .setOnAudioFocusChangeListener(audioFocusChangeListener)
                     .build();
         }
     }
@@ -120,19 +121,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleSongPlayback(float speed) {
         // Adjust this speed threshold based on when you want the song to start playing
-        float songStartThreshold = 0.0f;
+        float songStartThreshold = 13.0f;
 
         if (speed >= songStartThreshold && !isSongPlaying) {
-            // Request audio focus
-            int result = audioManager.requestAudioFocus(audioFocusChangeListener, audioFocusRequest);
-            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                // Start playing the song
-                mediaPlayer.start();
-                isSongPlaying = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Request audio focus using AudioFocusRequest
+                int result = audioManager.requestAudioFocus(audioFocusRequest);
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    // Start playing the song
+                    mediaPlayer.start();
+                    isSongPlaying = true;
+                }
+            } else {
+                // Request audio focus using deprecated method (for devices below Oreo)
+                int result = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    // Start playing the song
+                    mediaPlayer.start();
+                    isSongPlaying = true;
+                }
             }
         } else if (speed < songStartThreshold && isSongPlaying) {
             // Abandon audio focus
-            audioManager.abandonAudioFocusRequest(audioFocusRequest);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                audioManager.abandonAudioFocusRequest(audioFocusRequest);
+            } else {
+                audioManager.abandonAudioFocus(audioFocusChangeListener);
+            }
 
             // Stop playing the song
             mediaPlayer.pause();
