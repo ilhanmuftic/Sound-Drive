@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Sound Drive</string>
+    <string name="speed_format">Speed: %s kmh</string>
+</resources>
