@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private float lowSpeedThreshold = 3.0f;
     private float highSpeedThreshold = 9.0f;
     private float speedThreshold = 12.0f;
-    private float KMH = 4.4f;
+    private float KMH = 2.2f;
 
     // Adjust this constant to control sensitivity (lower value = less sensitive)
     private static final float SENSITIVITY_SCALE = 0.5f;
