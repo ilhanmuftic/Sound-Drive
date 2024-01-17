@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private float lowSpeedThreshold = 3.0f;
     private float highSpeedThreshold = 9.0f;
     private float speedThreshold = 12.0f;
-    private float KMH = 2.2f;
+    private float KMH = 2.1f;
 
     // Adjust this constant to control sensitivity (lower value = less sensitive)
     private static final float SENSITIVITY_SCALE = 0.5f;
@@ -212,25 +212,26 @@ public class MainActivity extends AppCompatActivity {
         if (isSpeedControlEnabled && speed >= songStartThreshold && !isSongPlaying) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // Request audio focus using AudioFocusRequest
-                if (speed >= songStartThreshold && !isSongPlaying) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        // Request audio focus using AudioFocusRequest
-                        int result = audioManager.requestAudioFocus(audioFocusRequest);
-                        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                            // Start playing the song
-                            mediaPlayer.start();
-                            isSongPlaying = true;
-                        }
-                    } else {
-                        // Request audio focus using deprecated method (for devices below Oreo)
-                        int result = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                            // Start playing the song
-                            mediaPlayer.start();
-                            isSongPlaying = true;
-                        }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Request audio focus using AudioFocusRequest
+                    int result = audioManager.requestAudioFocus(audioFocusRequest);
+                    if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                        // Start playing the song
+                        mediaPlayer.start();
+                        isSongPlaying = true;
                     }
-                } else if (isSpeedControlEnabled && speed < songStartThreshold && isSongPlaying) {
+                } else {
+                    // Request audio focus using deprecated method (for devices below Oreo)
+                    int result = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                    if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                        // Start playing the song
+                        mediaPlayer.start();
+                        isSongPlaying = true;
+                    }
+                }
+
+            }
+        } else if (isSpeedControlEnabled && speed < songStartThreshold && isSongPlaying) {
                     // Resume the music playing from the device
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         audioManager.abandonAudioFocusRequest(audioFocusRequest);
@@ -243,8 +244,6 @@ public class MainActivity extends AppCompatActivity {
                     isSongPlaying = false;
                 }
             }
-        }
-    }
 
         private void updateSpeedDisplay ( float speed){
             // Update the TextView to display the current speed
