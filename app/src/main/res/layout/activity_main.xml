@@ -13,7 +13,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
-        android:text="Speed Control" />
+        android:text="Speed Control"
+        android:checked="true"/>
 
     <!-- Existing TextView for displaying speed -->
     <SeekBar

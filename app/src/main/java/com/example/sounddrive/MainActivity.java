@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSpeedControlEnabled = true;
     private float lowSpeedThreshold = 3.0f;
     private float highSpeedThreshold = 9.0f;
-    private float speedThreshold = 12.0f;
+    private float speedThreshold = 40.0f;
     private float KMH = 2.1f;
 
     // Adjust this constant to control sensitivity (lower value = less sensitive)
@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         highThresholdLabel = findViewById(R.id.highThresholdLabel);
         speedThresholdLabel = findViewById(R.id.speedThresholdLabel);
 
+        lowThresholdLabel.setText("Low Speed Threshold :" + (int)(lowSpeedThreshold*KMH) + " KMH");
+        highThresholdLabel.setText("High Speed Threshold :" + (int)(highSpeedThreshold*KMH) + " KMH");
+        speedThresholdLabel.setText("Speed Threshold :" + (int)(speedThreshold*KMH) + " KMH");
 
         // MediaPlayer initialization
         mediaPlayer = MediaPlayer.create(this, R.raw.speed); // Replace 'your_song' with the actual resource ID
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         lowThresholdSeekBar.setProgress((int) (lowSpeedThreshold * 2)); // Example scaling for better user experience
         highThresholdSeekBar.setProgress((int) (highSpeedThreshold * 2));
         speedThresholdSeekBar.setProgress((int) (speedThreshold * 2));
+
 
         // Set listeners for SeekBars
         lowThresholdSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
@@ -163,14 +167,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        private void updateThresholdLabel(TextView labelTextView, float threshold, String name) {
+        public void updateThresholdLabel(TextView labelTextView, float threshold, String name) {
             // Update the TextView to display the current threshold value
             labelTextView.setText(name + " : " + convertToKMH(threshold));
         }
 
         public String convertToKMH(float speed){
             float kmh = speed * KMH;
-            return kmh + " KMH";
+            return (int) kmh + " KMH";
         }
 
         @Override
