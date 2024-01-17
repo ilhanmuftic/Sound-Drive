@@ -152,13 +152,13 @@ public class MainActivity extends AppCompatActivity {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // Update thresholds based on SeekBar progress
             if (seekBar == lowThresholdSeekBar) {
-                lowSpeedThreshold = progress / 2.0f; // Example scaling for better user experience
+                lowSpeedThreshold = (int) (progress / 2.0f); // Example scaling for better user experience
                 updateThresholdLabel(lowThresholdLabel, lowSpeedThreshold, "Low Speed Threshold");
             } else if (seekBar == highThresholdSeekBar) {
-                highSpeedThreshold = progress / 2.0f;
+                highSpeedThreshold = (int) (progress / 2.0f);
                 updateThresholdLabel(highThresholdLabel, highSpeedThreshold, "High Speed Threshold");
             } else if (seekBar == speedThresholdSeekBar) {
-                speedThreshold = progress / 2.0f;
+                speedThreshold = (int) (progress);
                 updateThresholdLabel( speedThresholdLabel, speedThreshold, "Speed Threshold");
             }
         }
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         adjustedVolume *= SENSITIVITY_SCALE; // You can adjust this multiplier
 
         // Ensure the adjusted volume is within valid bounds
-        adjustedVolume = Math.max(1, Math.min(maxVolume, adjustedVolume));
+        adjustedVolume = Math.max(2, Math.min(maxVolume, adjustedVolume));
 
         // Set the volume
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, adjustedVolume, 0);
@@ -254,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
         public class SpeedReceiver extends BroadcastReceiver {
             @Override
             public void onReceive(Context context, Intent intent) {
-                float speed = intent.getFloatExtra("SPEED", 0.6f);
-                float kmh = speed * KMH;
+                float speed = intent.getFloatExtra("SPEED", 0.4f);
+                float kmh = (int) (speed * KMH);
                 adjustVolume(speed);
                 updateSpeedDisplay(kmh);
                 handleSongPlayback(speed);
