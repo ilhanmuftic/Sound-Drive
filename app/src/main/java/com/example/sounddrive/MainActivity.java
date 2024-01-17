@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         public class SpeedReceiver extends BroadcastReceiver {
             @Override
             public void onReceive(Context context, Intent intent) {
-                float speed = intent.getFloatExtra("SPEED", 0.4f);
+                float speed = intent.getFloatExtra("SPEED", 0.6f);
                 float kmh = speed * KMH;
                 adjustVolume(speed);
                 updateSpeedDisplay(kmh);
